@@ -52,7 +52,7 @@ class MinioClientProcessor {
     void registerForReflection(
             CombinedIndexBuildItem index,
             BuildProducer<ReflectiveClassBuildItem> reflectionClasses) {
-        List<String> classes = getClasses("io.minio.messages", null);
+        /*~~>*/List<String> classes = getClasses("io.minio.messages", null);
         classes.addAll(getClasses("org.simpleframework.xml.core", ".*Label$"));
         classes.addAll(index.getIndex().getAllKnownSubclasses(DotName.createSimple(BaseArgs.class.getName())).stream()
                 .map(ClassInfo::name)
@@ -66,7 +66,7 @@ class MinioClientProcessor {
         return AdditionalBeanBuildItem.unremovableOf(MinioProducer.class);
     }
 
-    private List<String> getClasses(String packageName, String regexp) {
+    private /*~~>*/List<String> getClasses(String packageName, String regexp) {
         try {
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
             assert classLoader != null;
@@ -74,7 +74,7 @@ class MinioClientProcessor {
             URI uri = Objects.requireNonNull(classLoader.getResource(path)).toURI();
             try (FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.<String, Object> emptyMap())) {
                 Path packagePath = fileSystem.getPath(path);
-                List<Path> dirs = Files.walk(packagePath, 1).collect(Collectors.toList());
+                /*~~>*/List<Path> dirs = Files.walk(packagePath, 1).collect(Collectors.toList());
                 return dirs.stream().map(item -> findClasses(item, packageName, regexp))
                         .filter(Objects::nonNull)
                         .collect(Collectors.toList());
